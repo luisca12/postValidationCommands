@@ -15,12 +15,9 @@ def menuString(deviceIP, username):
         print('\t\tMenu - Please choose an option')
         print('\t\t  Only numbers are accepted')
         print('  -------------------------------------------------------------- ')
-        print('  >\t\t1. To run the validation commands:\t       <')
-        #print(f'\t{postValidationCommands}\n')      
+        print('  >\t\t1. To run the validation commands:\t       <')     
         print('  >\t\t\t2. Exit the program\t\t       <')
         print('  -------------------------------------------------------------- \n')
-
-menuString('','')
 
 def inputErrorString():
         os.system("CLS")
