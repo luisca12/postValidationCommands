@@ -1,4 +1,6 @@
 import os
+from commandsCLI import postValidationCommands
+
 
 def greetingString():
         os.system("CLS")
@@ -6,17 +8,19 @@ def greetingString():
         print("    Welcome to the automated show commands program ")
         print('  ------------------------------------------------- ')
 
-def menuString(deviceIP, username, shCommand):
+def menuString(deviceIP, username):
         os.system("CLS")
         print(f"Connected to: {deviceIP} as {username}\n")
         print('  -------------------------------------------------------------- ')
         print('\t\tMenu - Please choose an option')
         print('\t\t  Only numbers are accepted')
         print('  -------------------------------------------------------------- ')
-        print('  >\t\t1. To run the following commands:\t       <')
-        print(f'\t{shCommand}\n')      
+        print('  >\t\t1. To run the validation commands:\t       <')
+        #print(f'\t{postValidationCommands}\n')      
         print('  >\t\t\t2. Exit the program\t\t       <')
         print('  -------------------------------------------------------------- \n')
+
+menuString('','')
 
 def inputErrorString():
         os.system("CLS")

@@ -20,10 +20,12 @@ postValidationCommands = [
 
 shHostname = "show run | i hostname"
 
-def postValidation(validIPs, username, netDevice, shCommand):
+
+def postValidation(validIPs, username, netDevice):
     # This function is to take a show run
     
     for validDeviceIP in validIPs:
+        commandOut = ""
         try:
             validDeviceIP = validDeviceIP.strip()
             currentNetDevice = {
@@ -45,25 +47,25 @@ def postValidation(validIPs, username, netDevice, shCommand):
                 try:
                     authLog.info(f"Connected to device: {validDeviceIP}")
                     sshAccess.enable()
+
                     shHostnameOut = sshAccess.send_command(shHostname)
                     authLog.info(f"User {username} successfully found the hostname {shHostnameOut} for device: {validDeviceIP}")
                     shHostnameOut = shHostnameOut.split(' ')[1]
                     shHostnameOut = shHostnameOut + "#"
 
-                    authLog.info(f"Running the following commands: {postValidationCommands}")
-                    print(f"INFO: Running command:{postValidationCommands}, on device {validDeviceIP}")
-                    postValidationCommandsOut = sshAccess.send_config_set(postValidationCommands)
-                    authLog.info(f"Automation successfully run the command: {postValidationCommands} on device: {validDeviceIP}")
-                    authLog.info(f"{shHostnameOut}{postValidationCommands}\n{postValidationCommandsOut}")
-                    print(f"INFO: Command successfully executed\n{shHostnameOut}{postValidationCommands}\n{postValidationCommandsOut}")
+                    for command in postValidationCommands:
+                        authLog.info(f"Running the following commands: {command}")
+                        print(f"INFO: Running command:{command}, on device {validDeviceIP}")
+                        commandOut = sshAccess.send_command(command)
+      
+                        authLog.info(f"Automation successfully run the command: {command} on device: {validDeviceIP}")
+                        authLog.info(f"{shHostnameOut}{command}\n{commandOut}")
+                        print(f"INFO: Command successfully executed\n{shHostnameOut}{command}\n{commandOut}")
 
-                    filename = filterFilename('Post Validation Commands')
-                    authLog.info(f"This is the filename:{filename}")
-
-                    with open(f"Outputs/{filename} for device {validDeviceIP}.txt", "a") as file:
-                        file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
-                        file.write(f"{shHostnameOut}\n{postValidationCommands}\n{postValidationCommandsOut}")
-                        authLog.info(f"File:{file} successfully created")
+                        with open(f"Outputs/Post Validation Commands for device {validDeviceIP}.txt", "a") as file:
+                            file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
+                            file.write(f"{shHostnameOut}{command}\n{commandOut}")
+                            authLog.info(f"File:{file} successfully created")
 
                     print("INFO: Outputs and files successfully created.")
                     print("INFO: For any erros or logs please check authLog.txt in logs")
